@@ -28,11 +28,10 @@ public class StudentService {
     }
 
     public void deleteStudent(Long studentId) {
-        Optional<Student> studentToDelete = studentRepository
-                .findById(studentId);
-        if (studentToDelete.isEmpty()) {
-            throw new IllegalArgumentException("Student not found");
+        boolean studentExists = studentRepository.existsById(studentId);
+        if (!studentExists) {
+            throw new IllegalArgumentException("Student does not exist");
         }
-        studentRepository.delete(studentToDelete.get());
+        studentRepository.deleteById(studentId);
     }
 }
