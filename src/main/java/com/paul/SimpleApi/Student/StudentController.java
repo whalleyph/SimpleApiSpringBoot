@@ -1,5 +1,6 @@
 package com.paul.SimpleApi.Student;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,5 +30,10 @@ public class StudentController {
     @DeleteMapping(path = "{studentId}")
     public void deleteStudent(@PathVariable Long studentId) {
         studentService.deleteStudent(studentId);
+    }
+
+    @PutMapping(path = "{studentId}")
+    public void updateStudentNameAndEmail(@PathVariable Long studentId, @RequestBody UpdateStudentDTO updateStudentDTO) {
+        studentService.updateStudentNameAndEmail(studentId, updateStudentDTO);
     }
 }

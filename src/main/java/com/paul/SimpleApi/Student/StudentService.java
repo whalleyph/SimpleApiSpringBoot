@@ -1,5 +1,6 @@
 package com.paul.SimpleApi.Student;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +20,7 @@ public class StudentService {
     }
 
     public void postStudent(Student student) {
-        Optional<Student> studentOptionalEmail = studentRepository
-                .findStudentByEmail(student.getEmail());
+        Optional<Student> studentOptionalEmail = studentRepository.findStudentByEmail(student.getEmail());
         if (studentOptionalEmail.isPresent()) {
             throw new IllegalArgumentException("Email already exists");
         }
@@ -33,5 +33,16 @@ public class StudentService {
             throw new IllegalArgumentException("Student does not exist");
         }
         studentRepository.deleteById(studentId);
+    }
+
+    @Transactional
+    public void updateStudentNameAndEmail(Long studentId, UpdateStudentDTO updateStudentDTO) {
+        boolean studentExists = studentRepository.existsById(studentId);
+        if (!studentExists) {
+            throw new IllegalArgumentException("Student does not exist");
+        }
+        Student studentToUpdate = studentRepository.findById(studentId).get();
+        studentToUpdate.setName(updateStudentDTO.getName());
+        studentToUpdate.setEmail(updateStudentDTO.getEmail());
     }
 }
